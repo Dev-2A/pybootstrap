@@ -1,0 +1,44 @@
+# {{ project_name }}
+
+{{ description | default('프로젝트 설명을 작성해주세요.', true) }}
+
+## 시작하기
+
+### 필요 조건
+
+- Python {{ python_version }}+
+
+### 설치
+
+```bash
+# 가상환경 생성
+python -m venv .venv
+
+# 가상환경 활성화 (Windows)
+.venv\Scripts\activate
+
+# 가상환경 활성화 (macOS/Linux)
+source .venv/bin/activate
+
+# 의존성 설치
+pip install -r requirements.txt
+```
+
+{% if use_docker %}
+
+### Docker
+
+```bash
+docker build -t {{ project_name_kebab }} .
+docker run -p 8000:8000 {{ project_name_kebab }}
+```
+
+{% endif %}
+
+## 프로젝트 구조
+
+> 🚧 프로젝트 구조를 작성해주세요.
+
+## 라이선스
+
+MIT License

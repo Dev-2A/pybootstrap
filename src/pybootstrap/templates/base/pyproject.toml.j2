@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "{{ project_name_kebab }}"
+version = "0.1.0"
+description = "{{ description | default('', true) }}"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">={{ python_version }}"
+{% if author %}authors = [{name = "{{ author }}"}]
+{% endif %}
+dependencies = [
+{% for dep in dependencies %}    "{{ dep }}",
+{% endfor %}]
+
+{% if entry_point is defined %}[project.scripts]
+{{ project_slug }} = "{{ entry_point }}"
+{% endif %}
+
+[tool.setuptools.packages.find]
+where = ["src"]

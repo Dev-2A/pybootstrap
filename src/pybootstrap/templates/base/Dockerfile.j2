@@ -1,0 +1,21 @@
+FROM python:{{ python_version }}-slim
+
+WORKDIR /app
+
+# 의존성 먼저 설치 (캐시 활용)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 소스 복사
+COPY . .
+
+{% if template_name == "fastapi" -%}
+EXPOSE 8000
+CMD ["uvicorn", "src.{{ project_slug }}.main:app", "--host", "0.0.0.0", "--port",
+"8000"]
+{% elif template_name == "cli" -%}
+RUN pip install -e .
+ENTRYPOINT ["{{ project_slug }}"]
+{% else -%}
+CMD ["python", "-m", "{{ project_slug }}"]
+{% endif %}
