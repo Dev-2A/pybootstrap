@@ -1,0 +1,16 @@
+"""Pydantic 스키마 정의"""
+
+from pydantic import BaseModel
+
+
+class MessageResponse(BaseModel):
+    """기본 메시지 응답"""
+
+    message: str
+
+
+class HealthResponse(BaseModel):
+    """헬스체크 응답"""
+
+    status: str
+    version: str
