@@ -244,5 +244,102 @@ def info(template_name: str):
                 click.echo(f"    {dep}")
 
 
+# ─── init-template ───────────────────────────────────────────
+
+@main.command("init-template")
+@click.argument("name")
+@click.option("-d", "--description", default="", help="템플릿 설명")
+@click.option("--display-name", default="", help="표시 이름")
+def init_template(name: str, description: str, display_name: str):
+    """빈 커스텀 템플릿 스켈레톤을 생성합니다.
+
+    NAME: 템플릿 이름 (예: flask, django)
+    """
+    from .custom import CustomTemplateError, init_custom_template
+
+    try:
+        template_dir = init_custom_template(
+            name=name,
+            display_name=display_name,
+            description=description,
+        )
+    except CustomTemplateError as e:
+        click.echo(f"❌ {e}", err=True)
+        sys.exit(1)
+
+    click.echo(f"✅ 커스텀 템플릿 '{name}' 스켈레톤 생성 완료!")
+    click.echo(f"   📁 경로: {template_dir}")
+    click.echo("")
+    click.echo("   다음 단계:")
+    click.echo(f"   1. {template_dir} 안의 .j2 파일들을 수정하세요")
+    click.echo(f"   2. template.json에서 파일 목록과 의존성을 편집하세요")
+    click.echo(f"   3. bootstrap create my-project -t {name}")
+
+
+# ─── import ──────────────────────────────────────────────────
+
+@main.command("import")
+@click.argument("source_dir", type=click.Path(exists=True))
+@click.argument("name")
+@click.option("-d", "--description", default="", help="템플릿 설명")
+@click.option("--display-name", default="", help="표시 이름")
+def import_template(source_dir: str, name: str, description: str, display_name: str):
+    """기존 프로젝트 디렉토리를 커스텀 템플릿으로 변환합니다.
+
+    \b
+    SOURCE_DIR: 소스 프로젝트 디렉토리 경로
+    NAME: 생성할 템플릿 이름
+    """
+    from pathlib import Path as _Path
+
+    from .custom import CustomTemplateError, import_as_template
+
+    try:
+        template_dir = import_as_template(
+            source_dir=_Path(source_dir),
+            name=name,
+            display_name=display_name,
+            description=description,
+        )
+    except CustomTemplateError as e:
+        click.echo(f"❌ {e}", err=True)
+        sys.exit(1)
+
+    click.echo(f"✅ 프로젝트를 커스텀 템플릿 '{name}'으로 변환 완료!")
+    click.echo(f"   📁 경로: {template_dir}")
+    click.echo("")
+    click.echo("   다음 단계:")
+    click.echo(f"   1. {template_dir / 'template.json'}을 확인하세요")
+    click.echo("   2. .j2 파일에 {{ project_name }} 등 변수를 추가하세요")
+    click.echo(f"   3. bootstrap create my-project -t {name}")
+
+
+# ─── remove-template ─────────────────────────────────────────
+
+@main.command("remove-template")
+@click.argument("name")
+@click.confirmation_option(prompt="정말 삭제하시겠습니까?")
+def remove_template(name: str):
+    """커스텀 템플릿을 삭제합니다.
+
+    NAME: 삭제할 커스텀 템플릿 이름
+    """
+    from .custom import delete_custom_template
+    from .registry import get_registry
+
+    # 내장 템플릿은 삭제 불가
+    registry = get_registry()
+    template = registry.get(name)
+    if template and template.template_type.value == "builtin":
+        click.echo(f"❌ 내장 템플릿 '{name}'은 삭제할 수 없습니다.", err=True)
+        sys.exit(1)
+
+    if delete_custom_template(name):
+        click.echo(f"🗑️  커스텀 템플릿 '{name}'을 삭제했습니다.")
+    else:
+        click.echo(f"❌ 커스텀 템플릿 '{name}'을 찾을 수 없습니다.", err=True)
+        sys.exit(1)
+
+
 if __name__ == "__main__":
     main()
