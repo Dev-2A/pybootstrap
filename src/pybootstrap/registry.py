@@ -212,7 +212,7 @@ class TemplateRegistry:
     """내장 + 커스텀 템플릿을 통합 관리하는 레지스트리"""
     
     def __init__(self):
-        self._templates = dict[str, TemplateInfo] = {}
+        self._templates: dict[str, TemplateInfo] = {}
         self._register_builtins()
     
     def _register_builtins(self):
