@@ -107,6 +107,7 @@ bootstrap remove-template flask --yes
 
 ## 프로젝트 구조
 
+```text
 pybootstrap/  
 ├── src/  
 │   └── pybootstrap/  
@@ -127,6 +128,7 @@ pybootstrap/
 ├── pyproject.toml  
 ├── requirements.txt  
 └── requirements-dev.txt
+```
 
 ## 개발
 
