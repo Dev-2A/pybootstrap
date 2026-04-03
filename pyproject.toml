@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "pybootstrap"
+version = "0.1.0"
+description = "한 줄 명령어로 Python 프로젝트 스캐폴딩을 자동화하는 CLI 도구"
+readme = "README.md"
+license = {text = "MIT"}
+requires-pythono = ">=3.11"
+dependencies = [
+    "click>=8.1.0",
+    "jinja2>=3.1.0",
+    "rich>=13.0.0",
+]
+
+[project.scripts]
+bootstrap = "pybootstrap.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+pybootstrap = ["templates/**/*"]
