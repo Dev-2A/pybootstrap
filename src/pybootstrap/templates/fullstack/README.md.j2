@@ -1,0 +1,57 @@
+# {{ project_name }}
+
+{{ description | default('React + FastAPI 풀스택 프로젝트', true) }}
+
+## 프로젝트 구조
+
+```text
+{{ project_name_kebab }}/
+├── backend/          # FastAPI 백엔드
+│   ├── main.py
+│   ├── requirements.txt
+│   └── Dockerfile
+├── frontend/         # React 프론트엔드
+│   ├── src/
+│   ├── package.json
+│   └── Dockerfile
+{% if use_docker %}├── docker-compose.yml
+{% endif %}└── README.md
+```
+
+## 시작하기
+
+### 백엔드
+
+```bash
+cd backend
+python -m venv .venv
+.venv\Scripts\activate          # Windows
+# source .venv/bin/activate     # macOS/Linux
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+### 프론트엔드
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+{% if use_docker %}
+
+### Docker Compose
+
+```bash
+docker-compose up --build
+```
+
+- 프론트엔드: http://localhost:3000
+- 백엔드 API: http://localhost:8000
+- API 문서: http://localhost:8000/docs
+{% endif %}
+
+## 라이선스
+
+MIT License

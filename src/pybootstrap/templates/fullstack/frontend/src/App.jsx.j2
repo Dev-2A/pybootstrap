@@ -1,0 +1,31 @@
+import { useState, useEffect } from "react";
+
+function App() {
+  const [health, setHealth] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/health")
+      .then((res) => res.json())
+      .then((data) => setHealth(data))
+      .catch(() => setHealth({ status: "error" }));
+  }, []);
+
+  return (
+    <div style={% row %}{{ padding: "2rem", fontFamily: "sans-serif" }}{% endraw %}>
+      <h1>🚀 {{ project_name }}</h1>
+      <p>{{ description | default('React + FastAPI 풀스택 프로젝트', true) }}</p>
+      <hr />
+      <h3>API 상태</h3>
+      {health ? (
+        <pre style={% raw %}{{ background: "#f4f4f4", padding: "1rem",
+        borderRadius: "8px"}}{% endraw %}>
+          {JSON.stringify(health, null, 2)}
+        </pre>
+      ): (
+        <p>⏳ 백엔드 연결 중...</p>
+      )}
+    </div>
+  );
+}
+
+export default App;
