@@ -183,6 +183,10 @@ def _fullstack_template() -> TemplateInfo:
                 destination="frontend/src/main.jsx",
             ),
             FileEntry(
+                source="fullstack/frontend/src/App.jsx.j2",
+                destination="frontend/src/App.jsx",
+            ),
+            FileEntry(
                 source="fullstack/frontend/Dockerfile.j2",
                 destination="frontend/Dockerfile",
                 condition="use_docker",
