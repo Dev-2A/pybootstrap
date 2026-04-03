@@ -1,0 +1,36 @@
+"""{{ project_name }} - CLI 인터페이스"""
+
+import click
+
+from . import __version__
+from .core import run
+
+@click.group()
+@click.version_option(version=__version__, prog_name="{{ project_name }}")
+def main():
+    """{{ description | default(project_name, true) }}"""
+    pass
+
+
+@main.command()
+@click.argument("name", default="World")
+def hello(name: str):
+    """인사 메시지를 출력합니다.
+
+    NAME: 인사할 대상 (기본: World)
+    """
+    result = run(name)
+    click.echo(result)
+
+
+@main.command()
+def info():
+    """프로젝트 정보를 출력합니다."""
+    click.echo(f"📦 {{ project_name }} v{__version__}")
+    click.echo(f"📝 {{ description | default('', true) }}")
+{% if author %}    click.echo(f"👤 {{ author }}")
+{% endif %}
+
+
+if __name__ == "__main__":
+    main()
